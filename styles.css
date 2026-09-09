@@ -17,7 +17,7 @@
 .reflection{background:var(--sage);border-left:3px solid #8b9b72;padding:22px 26px;margin-top:26px;border-radius:0 5px 5px 0}.reflection strong{font-size:.82rem}.reflection p{margin:9px 0 0;font-size:.94rem}
 .practice-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin:25px 0}.practice-grid>div{border-top:2px solid #a1ae8e}.practice-grid h4{margin-top:18px}.practice-grid p{font-size:.92rem}
 .topic .editorial-note,.knowledge-source{font-size:.78rem;color:var(--muted);line-height:1.7}.knowledge-source{margin:25px 0 0}.knowledge-source a{text-underline-offset:3px}
-.faq-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:65px}.faq-layout h2{margin-bottom:24px}.faq-layout>div>p{color:var(--muted);max-width:320px}.faq-list details{border-bottom:1px solid #c4ceba;padding:0 0 19px;margin-bottom:19px}.faq-list summary{cursor:pointer;font-size:1rem;font-weight:600;line-height:1.6;padding:8px 3px}.faq-list summary::marker{color:#617a53}.faq-list summary:focus-visible{outline:3px solid #b57727;outline-offset:5px}.faq-list details p{font-size:.94rem;line-height:1.8;color:var(--muted);margin:17px 0 0;padding-inline:3px}
+.faq-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:65px}.faq-layout h2{margin-bottom:24px}.faq-layout>div>p{color:var(--muted);max-width:320px}.faq-list details{border-bottom:1px solid #c4ceba;padding:0 0 19px;margin-bottom:19px}.faq-list summary{display:flex;align-items:center;justify-content:space-between;gap:20px;cursor:pointer;font-size:1rem;font-weight:600;line-height:1.6;padding:8px 3px;list-style:none}.faq-list summary::-webkit-details-marker{display:none}.faq-list summary::after{content:"+";color:#617a53;font-size:1.35rem;font-weight:400;line-height:1;flex:0 0 auto}.faq-list details[open] summary::after{content:"–"}.faq-list summary:focus-visible{outline:3px solid #b57727;outline-offset:5px}.faq-list details p{font-size:.94rem;line-height:1.8;color:var(--muted);margin:17px 0 0;padding-inline:3px}
 @media(max-width:1000px){.knowledge-layout{grid-template-columns:210px minmax(0,1fr);gap:35px}.header nav{gap:15px;flex-wrap:wrap;justify-content:flex-end}.faq-layout{gap:35px}}
 @media(max-width:740px){.knowledge-layout,.faq-layout{grid-template-columns:1fr;gap:35px}.topic-nav{position:static;display:grid;grid-template-columns:1fr 1fr;gap:0 20px;margin:0;width:100%;font-size:.76rem}.topic-nav .eyebrow{grid-column:1/-1}.topic{padding-block:30px}.practice-grid{grid-template-columns:1fr;gap:6px}.reflection{padding:20px}.header nav{justify-content:flex-start}.faq-layout>div>p{max-width:none}}
 
@@ -47,3 +47,35 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .audience-article>header h3{font-size:1.85rem;line-height:1.25;margin-bottom:17px}.audience-article>header p{font-size:.95rem;color:var(--muted)}
 .audience-copy{max-width:730px}.audience-copy p{color:var(--muted);line-height:1.8}.audience-copy h4{font:1.25rem/1.4 Georgia,serif;margin:28px 0 13px}.audience-copy a{text-underline-offset:4px}.audience-copy .source-note{font-size:.8rem;line-height:1.7;margin-top:22px}
 @media(max-width:740px){.audience-article{grid-template-columns:1fr;gap:12px;padding-block:30px}.audience-links{justify-content:flex-start}.audience-article>header h3{font-size:1.65rem}}
+
+/* Språkvelger: samme navigasjon på begge statiske språkversjoner. */
+.header{flex-wrap:wrap;gap:20px 28px}
+.header .language-switch{display:flex;flex-wrap:nowrap;gap:2px;width:auto;flex-shrink:0;padding:3px;border:1px solid var(--line);border-radius:5px;font-size:.78rem}
+.language-switch a{padding:8px 11px;border-radius:3px;text-decoration:none;min-height:36px;display:flex;align-items:center}
+.language-switch a[aria-current="page"]{background:var(--green);color:white}
+.language-switch a:hover{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:740px){.header .brand{order:0}.header .language-switch{order:1;margin-left:auto}.header>nav:not(.language-switch){order:2;width:100%}}
+
+/* Fordypning som kan åpnes ved behov, og eksempler på fleksibel tilpasning. */
+.reading-detail{margin:24px 0;border:1px solid var(--line);border-radius:5px;background:var(--sage);padding:0 20px}
+.reading-detail summary{display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;list-style:none;font-weight:600;line-height:1.5;padding:16px 0;min-height:48px}
+.reading-detail summary::-webkit-details-marker{display:none}
+.reading-detail summary::after{content:"+";flex-shrink:0;font-size:1.3rem}
+.reading-detail[open] summary::after{content:"−"}
+.reading-detail summary:focus-visible{outline:3px solid #b57727;outline-offset:4px}
+.reading-detail .source-note{font-size:.8rem}
+.flexible-models{display:grid;gap:14px;margin:22px 0}
+.flexible-models>div{border:1px solid var(--line);border-left:3px solid #8b9b72;border-radius:4px;padding:18px 20px}
+.flexible-models h5{font:1.15rem/1.4 Georgia,serif;margin:0 0 12px}
+.flexible-models p{margin:8px 0;font-size:.94rem}
+
+/* Faglige ideer. */
+.ideas{border-bottom:1px solid var(--line)}
+.ideas-intro{max-width:850px;color:var(--muted);line-height:1.8}
+.ideas-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px 50px;margin-top:35px}
+.ideas-grid article{border-top:1px solid var(--line);padding-top:24px}
+.ideas-grid h3{font-size:1.4rem;margin-bottom:16px}
+.ideas-grid p{color:var(--muted);font-size:.95rem;line-height:1.8;margin-bottom:0}
+.ideas-context{max-width:850px;margin:32px 0 0;font-size:.83rem;color:var(--muted);line-height:1.8}
+.ideas-context a{text-underline-offset:4px}
+@media(max-width:740px){.ideas-grid{grid-template-columns:1fr;gap:24px}}
