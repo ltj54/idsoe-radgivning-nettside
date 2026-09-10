@@ -6,14 +6,7 @@
   const requested = url.searchParams.get('lang');
   const read = () => { try { return localStorage.getItem(key); } catch { return null; } };
   const remember = (language) => { try { localStorage.setItem(key, language); } catch { /* Optional storage. */ } };
-  let preferred;
-  if (requested === 'nb' || requested === 'en') {
-    preferred = requested;
-  } else if (current === 'en') {
-    preferred = 'en';
-  } else {
-    preferred = read();
-  }
+  const preferred = requested === 'nb' || requested === 'en' ? requested : current === 'en' ? 'en' : read();
   if (preferred === 'nb' || preferred === 'en') {
     remember(preferred);
     if (preferred !== current) {
@@ -50,35 +43,32 @@
     window.addEventListener('hashchange', updateTarget);
     link.addEventListener('click', () => remember(link.dataset.language));
   });
-  const setupDialogs = () => {
-    const aboutDialog = document.querySelector('[data-about-open]') && document.getElementById('om-ella');
-    if (aboutDialog) {
-      document.querySelector('[data-about-open]').addEventListener('click', () => aboutDialog.showModal());
-      document.querySelector('[data-about-close]').addEventListener('click', () => aboutDialog.close());
-      aboutDialog.addEventListener('click', (event) => {
-        if (event.target === aboutDialog) aboutDialog.close();
-      });
-      if (window.location.hash === '#om-ella') aboutDialog.showModal();
-    }
-    const contactDialog = document.getElementById('contact-form-dialog');
-    if (contactDialog) {
-      document.querySelectorAll('a[href$="#kontakt"]').forEach((link) => {
-        link.addEventListener('click', (event) => {
-          if (document.body.classList.contains('home-page')) {
-            event.preventDefault();
-            contactDialog.showModal();
-          }
-        });
-      });
-      document.querySelector('[data-contact-close]').addEventListener('click', () => contactDialog.close());
-      contactDialog.addEventListener('click', (event) => {
-        if (event.target === contactDialog) contactDialog.close();
-      });
-      if (window.location.hash === '#kontakt') contactDialog.showModal();
-    }
+  const isEnglish = current === 'en';
+  const createDialog = (id, title, body) => {
+    let dialog = document.getElementById(id);
+    if (dialog) return dialog;
+    dialog = document.createElement('dialog');
+    dialog.id = id;
+    dialog.className = id === 'about-dialog' ? 'about-dialog' : 'contact-form-dialog';
+    dialog.setAttribute('aria-labelledby', `${id}-title`);
+    dialog.innerHTML = body;
+    document.body.append(dialog);
+    return dialog;
   };
-  setupDialogs();
-  const setupPendingForms = () => document.querySelectorAll('[data-formspree-pending]').forEach((form) => {
+  const aboutDialog = createDialog('about-dialog', isEnglish ? 'About Ella' : 'Om Ella', isEnglish
+    ? '<div class="about-dialog-card"><button class="dialog-close" type="button" data-about-close aria-label="Close About Ella">×</button><p class="eyebrow">ABOUT ELLA</p><h2 id="about-dialog-title">Ella Maria<br>Cosmovici Idsøe</h2><p class="large">Owner of Idsøe Rådgivning.</p><p>Ella delivers courses and seminars and provides advice relating to children and students with high learning potential.</p><p>Her work explores learning potential, differentiated teaching and how schools can support students’ development.</p><a class="text-link" href="ellas-ideas.html">Ella’s ideas for developing practice</a></div>'
+    : '<div class="about-dialog-card"><button class="dialog-close" type="button" data-about-close aria-label="Lukk Om Ella">×</button><p class="eyebrow">OM ELLA</p><h2 id="about-dialog-title">Ella Maria<br>Cosmovici Idsøe</h2><p class="large">Innehaver av Idsøe Rådgivning.</p><p>Ella holder kurs og seminarer og arbeider med rådgivning knyttet til barn og elever med stort læringspotensial.</p><p>Hun arbeider med spørsmål om læringspotensial, tilpasset undervisning og hvordan skolen kan støtte elevenes utvikling.</p><a class="text-link" href="ellas-ideer.html">Ellas ideer for faglig utvikling</a></div>');
+  const contactDialog = createDialog('contact-form-dialog', isEnglish ? 'Contact' : 'Kontakt', isEnglish
+    ? '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Close contact form">×</button><p class="eyebrow">CONTACT</p><h2 id="contact-form-dialog-title">Send an enquiry</h2><p>Enquiries about courses, seminars, advice and educational topics can be directed to Idsøe Rådgivning.</p><form class="contact-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST" data-formspree-pending><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" required><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email" required><label for="contact-subject">What is your enquiry about?</label><input id="contact-subject" name="subject" type="text" required><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" required></textarea><input type="hidden" name="_subject" value="New enquiry to Idsøe Rådgivning"><button class="button" type="submit">Send enquiry</button><p class="form-note" data-form-note>The form will be activated when the Formspree endpoint is set.</p></form></div>'
+    : '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Lukk kontaktskjema">×</button><p class="eyebrow">KONTAKT</p><h2 id="contact-form-dialog-title">Send en henvendelse</h2><p>Henvendelser om kurs, seminarer, rådgivning og faglige temaer kan rettes til Idsøe Rådgivning.</p><form class="contact-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST" data-formspree-pending><label for="contact-name">Navn</label><input id="contact-name" name="name" type="text" autocomplete="name" required><label for="contact-email">E-post</label><input id="contact-email" name="email" type="email" autocomplete="email" required><label for="contact-subject">Hva gjelder henvendelsen?</label><input id="contact-subject" name="subject" type="text" required><label for="contact-message">Melding</label><textarea id="contact-message" name="message" rows="6" required></textarea><input type="hidden" name="_subject" value="Ny henvendelse til Idsøe Rådgivning"><button class="button" type="submit">Send henvendelse</button><p class="form-note" data-form-note>Skjemaet aktiveres når Formspree-endepunktet er satt.</p></form></div>');
+  document.querySelectorAll('[data-about-open], a[href$="#om-ella"]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); aboutDialog.showModal(); }));
+  document.querySelectorAll('a[href$="#kontakt"]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); contactDialog.showModal(); }));
+  document.querySelector('[data-about-close]').addEventListener('click', () => aboutDialog.close());
+  document.querySelector('[data-contact-close]').addEventListener('click', () => contactDialog.close());
+  [aboutDialog, contactDialog].forEach((dialog) => dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }));
+  if (window.location.hash === '#om-ella') aboutDialog.showModal();
+  if (window.location.hash === '#kontakt') contactDialog.showModal();
+  document.querySelectorAll('[data-formspree-pending]').forEach((form) => {
     form.addEventListener('submit', (event) => {
       if (form.action.includes('REPLACE_WITH_FORM_ID')) {
         event.preventDefault();
@@ -87,7 +77,6 @@
       }
     });
   });
-  setupPendingForms();
   window.addEventListener('hashchange', () => {
     url.hash = window.location.hash;
     routeLegacyHash();
