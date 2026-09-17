@@ -1,0 +1,11 @@
+/.idea/
+*.iml
+/docs/
+/.run/
+/publisering/
+node_modules/
+dist/
+out/
+.env
+.env.*
+!.env.example

@@ -1,0 +1,11 @@
+{
+  "name": "idsoe-radgivning",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lokal forhåndsvisning av Idsøe Rådgivning",
+  "scripts": {
+    "dev": "python -u scripts/serve.py --open",
+    "start": "python -u scripts/serve.py --open",
+    "serve": "python -u scripts/serve.py"
+  }
+}
