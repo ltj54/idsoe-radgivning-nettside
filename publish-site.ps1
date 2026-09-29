@@ -6,6 +6,7 @@ $ErrorActionPreference = 'Stop'
 $projectDirectory = (Resolve-Path -LiteralPath $PSScriptRoot).Path
 $siteDirectory = Join-Path $projectDirectory 'site'
 $repositoryUrl = 'https://github.com/ltj54/idsoe-radgivning-nettside.git'
+$pagesUrl = 'https://ltj54.github.io/idsoe-radgivning-nettside/'
 
 if (-not (Test-Path -LiteralPath (Join-Path $siteDirectory 'index.html'))) {
     throw "Finner ikke site\index.html i $siteDirectory"
@@ -30,6 +31,21 @@ $stagedBefore = git -C $projectDirectory diff --cached --name-only
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke kontrollere Git-indeksen.' }
 if ($stagedBefore) {
     throw 'Det finnes allerede stagede endringer. Kontroller dem eller fjern staging før du kjører publiseringsskriptet.'
+}
+
+$versionValue = (Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss')
+$versionPath = Join-Path $siteDirectory 'version.json'
+$versionJson = "{`n  `"version`": `"$versionValue`"`n}`n"
+[System.IO.File]::WriteAllText($versionPath, $versionJson, [System.Text.UTF8Encoding]::new($false))
+
+$versionedAssets = 'styles\.css|version-check\.js|language\.js'
+$htmlFiles = Get-ChildItem -LiteralPath $siteDirectory -Filter '*.html' -File
+foreach ($htmlFile in $htmlFiles) {
+    $html = [System.IO.File]::ReadAllText($htmlFile.FullName)
+    $updatedHtml = [regex]::Replace($html, "(?<asset>$versionedAssets)(?:\?v=\d{14})?", "`${asset}?v=$versionValue")
+    if ($updatedHtml -ne $html) {
+        [System.IO.File]::WriteAllText($htmlFile.FullName, $updatedHtml, [System.Text.UTF8Encoding]::new($false))
+    }
 }
 
 $websiteFiles = Get-ChildItem -LiteralPath $siteDirectory -File
@@ -63,3 +79,4 @@ git -C $projectDirectory push origin main
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke publisere endringene til GitHub.' }
 
 Write-Host 'Nettsiden er publisert til GitHub Pages.' -ForegroundColor Green
+Write-Host "Når GitHub Pages er ferdig oppdatert, kan denne lenken sendes til Ella: $pagesUrl`?site-version=$versionValue" -ForegroundColor Green

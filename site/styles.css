@@ -92,7 +92,8 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .breadcrumbs a{text-decoration:underline;text-underline-offset:4px}.breadcrumbs span:last-child{overflow-wrap:anywhere}
 .home-page .hero{padding-block:55px}.hero-overview p{line-height:1.8}
 .home-page .courses{border-top:1px solid var(--line)}
-.audience-cards,.knowledge-cards{margin-top:32px}
+.audience-cards,.knowledge-cards{margin-top:32px}.audience-cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+.featured-post{padding-block:58px;border-bottom:1px solid var(--line)}.featured-post h2{font-size:clamp(2rem,3vw,3rem);max-width:780px;margin-bottom:18px}.featured-post .card-title{text-underline-offset:7px}.featured-post .lead{max-width:760px;color:var(--muted)}
 .link-card h3{max-width:none;margin-bottom:16px;font-size:1.55rem}.card-title{display:block;text-decoration:none;text-underline-offset:5px}.card-title:hover{text-decoration:underline}
 .link-card{transition:border-color .2s,background .2s}.link-card:hover,.link-card:focus-within{border-color:#849581;background:#edf0e6}
 .home-page .about-grid{grid-template-columns:1fr;max-width:850px;padding-bottom:34px}.home-page .about-grid h2{margin-bottom:20px}
@@ -150,3 +151,4 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .offer-card .editorial-note a{text-underline-offset:4px}
 @media(max-width:740px){.purpose-grid,.offer-grid{grid-template-columns:1fr;gap:30px}.offer-card{padding:26px}}
 @media(max-width:740px){.offer-list{grid-template-columns:1fr}.parent-offer{padding:26px 22px}}
+@media(max-width:1000px) and (min-width:741px){.audience-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}

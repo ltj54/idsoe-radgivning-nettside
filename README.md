@@ -34,3 +34,5 @@ Skriptet kopierer filene fra `site/` til GitHub Pages-rotmappen og legger bare d
 ```
 
 GitHub Pages serverer nettsiden fra rotmappen. `site/` er redigerbar kilde; publisering kopierer filene derfra til mappen som Pages viser.
+
+Publiseringsskriptet oppdaterer også nettstedets versjonsmarkør. Besøkende får dermed en automatisk engangsoppdatering når en nyere publisert versjon er tilgjengelig, uten å måtte tømme nettleserbufferen manuelt.
