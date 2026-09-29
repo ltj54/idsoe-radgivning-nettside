@@ -129,8 +129,6 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .purpose-grid p{color:#e0e6d8}.purpose-grid .large{color:#fff}
 .goal-copy h3{font-size:1.4rem;line-height:1.35;margin:34px 0 14px;color:#fff}
 .goal-copy p{max-width:720px}.goal-copy p:last-child{margin-bottom:0}
-.recognition-cards .card{border-top:4px solid var(--gold)}
-.recognition-cards h3{font-size:1.35rem;line-height:1.45}
 .offer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
 .offer-card{padding:36px;border:1px solid var(--line);border-radius:6px;background:#edf0e6}
 .offer-card h3{font-size:1.75rem;margin-bottom:18px}.offer-card>p:not(.eyebrow){color:var(--muted)}
@@ -151,5 +149,5 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .important-note{border-left:4px solid var(--gold);background:var(--paper);padding:22px 24px;margin:0 0 26px}
 .important-note h3{font-size:1.25rem;margin-bottom:10px}.important-note p{margin:0;color:var(--muted);line-height:1.7}
 .offer-card .editorial-note a{text-underline-offset:4px}
-@media(max-width:740px){.purpose-grid,.offer-grid{grid-template-columns:1fr;gap:30px}.recognition-cards h3{font-size:1.25rem}.offer-card{padding:26px}}
+@media(max-width:740px){.purpose-grid,.offer-grid{grid-template-columns:1fr;gap:30px}.offer-card{padding:26px}}
 @media(max-width:740px){.offer-list{grid-template-columns:1fr}.parent-offer{padding:26px 22px}}
