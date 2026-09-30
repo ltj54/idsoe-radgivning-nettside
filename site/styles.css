@@ -140,7 +140,7 @@ h2{font-size:clamp(1.9rem,2.8vw,2.65rem);line-height:1.2;letter-spacing:-.025em}
 .recognition-list{list-style:none;padding:0;margin:0 0 25px;display:grid;gap:0}
 .recognition-list li{position:relative;padding:14px 0 14px 28px;border-bottom:1px solid var(--line);line-height:1.65}
 .recognition-list li::before{content:"";position:absolute;left:2px;top:24px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
-.recognition-cta{font-size:1.05rem;margin:24px 0 0}.recognition-cta a{text-underline-offset:5px;font-weight:600}
+.recognition-cta{font-size:1.05rem;margin:24px 0 18px}
 .parent-offer{padding:clamp(28px,5vw,48px)}
 .parent-offer>p{max-width:720px;color:var(--muted)}
 .offer-list{list-style:none;padding:0;margin:24px 0 28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}

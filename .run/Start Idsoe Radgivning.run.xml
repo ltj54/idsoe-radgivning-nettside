@@ -1,6 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start Idsoe Radgivning" type="PowerShellRunType" factoryName="PowerShell" scriptUrl="$PROJECT_DIR$/start.ps1" workingDirectory="$PROJECT_DIR$" executablePath="$PROJECT_DIR$/../../Program Files/PowerShell/7/pwsh.exe">
-    <envs />
+  <configuration default="false" name="Start Idsoe Radgivning" type="js.build_tools.npm" factoryName="npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
     <method v="2" />
   </configuration>
 </component>

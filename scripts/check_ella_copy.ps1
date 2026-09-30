@@ -32,7 +32,7 @@ $expectedParents = @(
   'Du ser at kjedsomhet i barnehagen/skolen kan føre til frustrasjon eller atferdsvansker.',
   'Du er usikker på hvordan du kan formidle barnets behov for tilrettelegging til barnehagen eller skolen.',
   'Kjenner du deg igjen i noe av dette?',
-  'Ta gjerne kontakt.',
+  'Ta kontakt',
   'Tilbud til foreldre',
   'Vi tilbyr individuell veiledning til foreldre som ønsker økt forståelse for barnets styrker, behov og utviklingsmuligheter.',
   'Med utgangspunkt i informasjon fra foreldre og et utviklingsintervju utarbeider vi en profil av barnets styrker og behov. På bakgrunn av dette kan dere få:',
