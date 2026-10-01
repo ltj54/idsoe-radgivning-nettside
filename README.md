@@ -1,11 +1,10 @@
 # Idsøe Rådgivning
 
-Dette repositoriet inneholder nettsidekilden og lokale utviklingsverktøy for Idsøe Rådgivning.
+Dette repositoriet inneholder nettsiden og lokale utviklingsverktøy for Idsøe Rådgivning.
 
 ## Prosjektstruktur
 
-- `site/` inneholder redigerbar kilde for nettsiden.
-- HTML-, CSS-, JavaScript- og bildefilene i rotmappen er den gjeldende GitHub Pages-publiseringen.
+- HTML-, CSS-, JavaScript- og bildefilene i rotmappen er både den redigerbare nettsiden og GitHub Pages-publiseringen.
 - `scripts/` og `start.ps1` brukes til lokal forhåndsvisning og kontroll.
 - `docs/` inneholder lokale arbeidsdokumenter og er bevisst utelatt fra Git. Gjennomgå filer nøye før denne regelen endres.
 
@@ -27,12 +26,12 @@ Kjør `python scripts/check_site.py` for å kontrollere kildefilene. Kjør deret
 .\publish-site.ps1
 ```
 
-Skriptet kopierer filene fra `site/` til GitHub Pages-rotmappen og legger bare disse nettsidefilene i staging. Kontroller endringene før commit. Når du uttrykkelig vil commite og pushe nettsideendringen, kjør:
+Skriptet oppdaterer versjonsparameteren for CSS og JavaScript, kontrollerer filene og legger bare nettsidefilene i staging. Kontroller endringene før commit. Når du uttrykkelig vil commite og pushe nettsideendringen, kjør:
 
 ```powershell
 .\publish-site.ps1 -Publish
 ```
 
-GitHub Pages serverer nettsiden fra rotmappen. `site/` er redigerbar kilde; publisering kopierer filene derfra til mappen som Pages viser.
+GitHub Pages serverer nettsiden direkte fra rotmappen. Hver nettsidefil finnes derfor bare ett sted.
 
-Publiseringsskriptet oppdaterer også nettstedets versjonsmarkør. Besøkende får dermed en automatisk engangsoppdatering når en nyere publisert versjon er tilgjengelig, uten å måtte tømme nettleserbufferen manuelt.
+Versjonsparameteren sørger for at nettleseren henter oppdatert CSS og JavaScript etter publisering.

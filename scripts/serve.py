@@ -1,16 +1,34 @@
-"""Start the local preview with only site/ exposed."""
+"""Start the local preview from the project root."""
 
 import argparse
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from http import HTTPStatus
 from pathlib import Path
 import sys
+from urllib.parse import unquote, urlsplit
 import webbrowser
 
 
 class PreviewServer(ThreadingHTTPServer):
     # Do not allow multiple Windows processes to bind the same preview port.
     allow_reuse_address = False
+
+
+class PublicSiteHandler(SimpleHTTPRequestHandler):
+    """Serve only files that are part of the public website."""
+
+    def __init__(self, *args, public_files, **kwargs):
+        self.public_files = public_files
+        super().__init__(*args, **kwargs)
+
+    def send_head(self):
+        requested = unquote(urlsplit(self.path).path).lstrip("/") or "index.html"
+        if requested not in self.public_files:
+            self.send_error(HTTPStatus.NOT_FOUND)
+            return None
+        self.path = f"/{requested}"
+        return super().send_head()
 
 
 def main():
@@ -21,11 +39,17 @@ def main():
     if not 1 <= args.port <= 65535:
         parser.error("Port må være mellom 1 og 65535.")
 
-    site = Path(__file__).resolve().parent.parent / "site"
+    site = Path(__file__).resolve().parent.parent
     if not (site / "index.html").is_file():
         parser.error(f"Finner ikke nettsiden i {site}")
 
-    handler = partial(SimpleHTTPRequestHandler, directory=str(site))
+    public_files = {path.name for path in site.glob("*.html")}
+    public_files.update({"styles.css", "language.js", "favicon.svg"})
+    missing = sorted(name for name in public_files if not (site / name).is_file())
+    if missing:
+        parser.error(f"Mangler offentlige nettsidefiler: {', '.join(missing)}")
+
+    handler = partial(PublicSiteHandler, directory=str(site), public_files=public_files)
     try:
         server = PreviewServer(("127.0.0.1", args.port), handler)
     except OSError as error:

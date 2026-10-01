@@ -4,12 +4,11 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $projectDirectory = (Resolve-Path -LiteralPath $PSScriptRoot).Path
-$siteDirectory = Join-Path $projectDirectory 'site'
 $repositoryUrl = 'https://github.com/ltj54/idsoe-radgivning-nettside.git'
 $pagesUrl = 'https://ltj54.github.io/idsoe-radgivning-nettside/'
 
-if (-not (Test-Path -LiteralPath (Join-Path $siteDirectory 'index.html'))) {
-    throw "Finner ikke site\index.html i $siteDirectory"
+if (-not (Test-Path -LiteralPath (Join-Path $projectDirectory 'index.html'))) {
+    throw "Finner ikke index.html i $projectDirectory"
 }
 
 $gitRoot = (git -C $projectDirectory rev-parse --show-toplevel).Trim()
@@ -27,19 +26,26 @@ if ($branch -ne 'main') {
     throw "Publisering er bare konfigurert for main-grenen. Aktiv gren: $branch"
 }
 
+$websiteFiles = Get-ChildItem -LiteralPath $projectDirectory -File | Where-Object {
+    $_.Extension -in '.html', '.css', '.js', '.svg'
+}
+$websiteNames = @($websiteFiles | ForEach-Object { $_.Name })
+
 $stagedBefore = git -C $projectDirectory diff --cached --name-only
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke kontrollere Git-indeksen.' }
-if ($stagedBefore) {
+if ($stagedBefore -and -not $Publish) {
     throw 'Det finnes allerede stagede endringer. Kontroller dem eller fjern staging før du kjører publiseringsskriptet.'
+}
+if ($stagedBefore -and $Publish) {
+    $unexpectedStaged = @($stagedBefore | Where-Object { $_ -notin $websiteNames })
+    if ($unexpectedStaged) {
+        throw "Kan ikke publisere fordi andre filer er staget: $($unexpectedStaged -join ', ')"
+    }
 }
 
 $versionValue = (Get-Date).ToUniversalTime().ToString('yyyyMMddHHmmss')
-$versionPath = Join-Path $siteDirectory 'version.json'
-$versionJson = "{`n  `"version`": `"$versionValue`"`n}`n"
-[System.IO.File]::WriteAllText($versionPath, $versionJson, [System.Text.UTF8Encoding]::new($false))
-
-$versionedAssets = 'styles\.css|version-check\.js|language\.js'
-$htmlFiles = Get-ChildItem -LiteralPath $siteDirectory -Filter '*.html' -File
+$versionedAssets = 'styles\.css|language\.js'
+$htmlFiles = Get-ChildItem -LiteralPath $projectDirectory -Filter '*.html' -File
 foreach ($htmlFile in $htmlFiles) {
     $html = [System.IO.File]::ReadAllText($htmlFile.FullName)
     $updatedHtml = [regex]::Replace($html, "(?<asset>$versionedAssets)(?:\?v=\d{14})?", "`${asset}?v=$versionValue")
@@ -48,12 +54,6 @@ foreach ($htmlFile in $htmlFiles) {
     }
 }
 
-$websiteFiles = Get-ChildItem -LiteralPath $siteDirectory -File
-foreach ($file in $websiteFiles) {
-    Copy-Item -LiteralPath $file.FullName -Destination (Join-Path $projectDirectory $file.Name) -Force
-}
-
-$websiteNames = $websiteFiles | ForEach-Object { $_.Name }
 git -C $projectDirectory diff --check -- $websiteNames
 if ($LASTEXITCODE -ne 0) { throw 'Nettstedfilene inneholder whitespace-feil.' }
 
@@ -67,7 +67,7 @@ if (-not $stagedChanges) {
 }
 
 if (-not $Publish) {
-    Write-Host 'Nettstedfilene er kopiert og stagede. Kontroller dem med git diff --cached.' -ForegroundColor Yellow
+    Write-Host 'Nettstedfilene er kontrollert og stagede. Kontroller dem med git diff --cached.' -ForegroundColor Yellow
     Write-Host 'Når du vil publisere, kjør .\publish-site.ps1 -Publish.'
     exit 0
 }
@@ -79,4 +79,4 @@ git -C $projectDirectory push origin main
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke publisere endringene til GitHub.' }
 
 Write-Host 'Nettsiden er publisert til GitHub Pages.' -ForegroundColor Green
-Write-Host "Når GitHub Pages er ferdig oppdatert, kan denne lenken sendes til Ella: $pagesUrl`?site-version=$versionValue" -ForegroundColor Green
+Write-Host "Når GitHub Pages er ferdig oppdatert, kan denne lenken sendes til Ella: $pagesUrl" -ForegroundColor Green

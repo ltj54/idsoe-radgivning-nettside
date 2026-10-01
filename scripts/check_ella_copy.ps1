@@ -1,10 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
-$homeHtml = Get-Content -LiteralPath 'site/index.html' -Raw -Encoding UTF8
-$parents = Get-Content -LiteralPath 'site/foreldre.html' -Raw -Encoding UTF8
-$kindergartens = Get-Content -LiteralPath 'site/barnehager.html' -Raw -Encoding UTF8
-$schools = Get-Content -LiteralPath 'site/skoler.html' -Raw -Encoding UTF8
-$blog = Get-Content -LiteralPath 'site/samtalen-med-skolen.html' -Raw -Encoding UTF8
+$homeHtml = Get-Content -LiteralPath 'index.html' -Raw -Encoding UTF8
+$parents = Get-Content -LiteralPath 'foreldre.html' -Raw -Encoding UTF8
+$kindergartens = Get-Content -LiteralPath 'barnehager.html' -Raw -Encoding UTF8
+$schools = Get-Content -LiteralPath 'skoler.html' -Raw -Encoding UTF8
+$blog = Get-Content -LiteralPath 'samtalen-med-skolen.html' -Raw -Encoding UTF8
 
 function Get-VisibleText([string]$html) {
   $withoutTags = [regex]::Replace($html, '<[^>]+>', ' ')

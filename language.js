@@ -44,9 +44,8 @@
     link.addEventListener('click', () => remember(link.dataset.language));
   });
   const isEnglish = current === 'en';
-  // Add Ella's confirmed Gmail address here when it is ready.
-  const contactEmail = '';
-  const createDialog = (id, title, body) => {
+  const contactEmail = 'emidsoe@gmail.com';
+  const createDialog = (id, body) => {
     let dialog = document.getElementById(id);
     if (dialog) return dialog;
     dialog = document.createElement('dialog');
@@ -57,12 +56,12 @@
     document.body.append(dialog);
     return dialog;
   };
-  const aboutDialog = createDialog('about-dialog', isEnglish ? 'About Ella' : 'Om Ella', isEnglish
+  const aboutDialog = createDialog('about-dialog', isEnglish
     ? '<div class="about-dialog-card"><button class="dialog-close" type="button" data-about-close aria-label="Close About Ella">×</button><p class="eyebrow">ABOUT ELLA</p><h2 id="about-dialog-title">Ella Maria<br>Cosmovici Idsøe</h2><p class="large">Owner of Idsøe Rådgivning.</p><p>Ella works with professional learning and advice concerning children and students with high learning potential, appropriate challenges, inclusion and belonging.</p><a class="text-link" href="ellas-ideas.html">Ella’s ideas for developing practice</a></div>'
     : '<div class="about-dialog-card"><button class="dialog-close" type="button" data-about-close aria-label="Lukk Om Ella">×</button><p class="eyebrow">OM ELLA</p><h2 id="about-dialog-title">Ella Maria<br>Cosmovici Idsøe</h2><p class="large">Innehaver av Idsøe Rådgivning.</p><p>Ella arbeider med faglig formidling og rådgivning om barn og elever med stort læringspotensial, tilpassede utfordringer, inkludering og tilhørighet.</p><a class="text-link" href="ellas-ideer.html">Ellas ideer for faglig utvikling</a></div>');
-  const contactDialog = createDialog('contact-form-dialog', isEnglish ? 'Contact Ella' : 'Kontakt Ella', isEnglish
-    ? '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Close contact form">×</button><p class="eyebrow">CONTACT</p><h2 id="contact-form-dialog-title">Write to Ella</h2><p>Complete the fields below to prepare an email in your own email application.</p><form class="contact-form" data-contact-form><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required><label for="contact-email">Your email address</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="200" required><label for="contact-subject">Subject</label><input id="contact-subject" name="subject" type="text" maxlength="160" required><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" maxlength="3000" required></textarea><button class="button" type="submit">Open email</button><p class="form-note" data-contact-note tabindex="-1">The form will be activated when Ella’s new email address has been confirmed.</p></form></div>'
-    : '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Lukk kontaktskjema">×</button><p class="eyebrow">KONTAKT</p><h2 id="contact-form-dialog-title">Skriv til Ella</h2><p>Fyll ut feltene for å klargjøre en e-post i ditt eget e-postprogram.</p><form class="contact-form" data-contact-form><label for="contact-name">Navn</label><input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required><label for="contact-email">Din e-postadresse</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="200" required><label for="contact-subject">Emne</label><input id="contact-subject" name="subject" type="text" maxlength="160" required><label for="contact-message">Melding</label><textarea id="contact-message" name="message" rows="6" maxlength="3000" required></textarea><button class="button" type="submit">Åpne e-post</button><p class="form-note" data-contact-note tabindex="-1">Skjemaet aktiveres når Ellas nye e-postadresse er bekreftet.</p></form></div>');
+  const contactDialog = createDialog('contact-form-dialog', isEnglish
+    ? '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Close contact form">×</button><p class="eyebrow">CONTACT</p><h2 id="contact-form-dialog-title">Write to Ella</h2><p>Complete the fields below to prepare an email in your own email application.</p><form class="contact-form" data-contact-form><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required><label for="contact-email">Your email address</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="200" required><label for="contact-subject">Subject</label><input id="contact-subject" name="subject" type="text" maxlength="160" required><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="6" maxlength="3000" required></textarea><button class="button" type="submit">Open email</button><p class="form-note" data-contact-note tabindex="-1">Email is prepared for <a href="mailto:emidsoe@gmail.com">emidsoe@gmail.com</a>. You can also use this address directly.</p></form></div>'
+    : '<div class="contact-form-card"><button class="dialog-close" type="button" data-contact-close aria-label="Lukk kontaktskjema">×</button><p class="eyebrow">KONTAKT</p><h2 id="contact-form-dialog-title">Skriv til Ella</h2><p>Fyll ut feltene for å klargjøre en e-post i ditt eget e-postprogram.</p><form class="contact-form" data-contact-form><label for="contact-name">Navn</label><input id="contact-name" name="name" type="text" autocomplete="name" maxlength="120" required><label for="contact-email">Din e-postadresse</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="200" required><label for="contact-subject">Emne</label><input id="contact-subject" name="subject" type="text" maxlength="160" required><label for="contact-message">Melding</label><textarea id="contact-message" name="message" rows="6" maxlength="3000" required></textarea><button class="button" type="submit">Åpne e-post</button><p class="form-note" data-contact-note tabindex="-1">E-posten klargjøres til <a href="mailto:emidsoe@gmail.com">emidsoe@gmail.com</a>. Du kan også bruke adressen direkte.</p></form></div>');
   document.querySelectorAll('[data-about-open], a[href$="#om-ella"]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); aboutDialog.showModal(); }));
   document.querySelectorAll('a[href$="#kontakt"]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); contactDialog.showModal(); }));
   document.querySelector('[data-about-close]').addEventListener('click', () => aboutDialog.close());
@@ -75,11 +74,6 @@
     event.preventDefault();
     const form = event.currentTarget;
     const note = form.querySelector('[data-contact-note]');
-    if (!contactEmail) {
-      note.textContent = isEnglish ? 'The form is ready, but Ella’s email address has not yet been added.' : 'Skjemaet er klart, men Ellas e-postadresse er ikke lagt inn ennå.';
-      note.focus();
-      return;
-    }
     const data = new FormData(form);
     const subject = data.get('subject').toString().trim();
     const body = isEnglish

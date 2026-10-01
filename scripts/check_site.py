@@ -1,11 +1,10 @@
 """Check links, language pairs and document structure without dependencies."""
 
-import json
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-SITE = Path(__file__).resolve().parent.parent / "site"
+SITE = Path(__file__).resolve().parent.parent
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 
 
@@ -52,15 +51,17 @@ class Page(HTMLParser):
 
 
 def main():
-    version = json.loads((SITE / "version.json").read_text(encoding="utf-8"))["version"]
-    assert isinstance(version, str) and version.isdigit() and len(version) == 14, "invalid site version"
     pages = {path.name: Page(path) for path in SITE.glob("*.html")}
     links = 0
     for name, page in pages.items():
-        assert any(urlsplit(ref).path == "version-check.js" for ref in page.refs), (name, "missing version check")
-        for asset in ("styles.css", "version-check.js", "language.js"):
+        asset_versions = set()
+        for asset in ("styles.css", "language.js"):
             refs = [urlsplit(ref) for ref in page.refs if urlsplit(ref).path == asset]
-            assert len(refs) == 1 and refs[0].query == f"v={version}", (name, "stale asset version", asset)
+            assert len(refs) == 1 and refs[0].query.startswith("v="), (name, "missing asset version", asset)
+            version = refs[0].query.removeprefix("v=")
+            assert version.isdigit() and len(version) == 14, (name, "invalid asset version", asset)
+            asset_versions.add(version)
+        assert len(asset_versions) == 1, (name, "asset versions differ")
         assert set(page.labels) <= page.ids, (name, "missing aria label target")
         assert set(page.alternates) == {"nb", "en"}, (name, "missing language pair")
         for lang, target in page.alternates.items():
