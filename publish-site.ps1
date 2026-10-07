@@ -26,10 +26,11 @@ if ($branch -ne 'main') {
     throw "Publisering er bare konfigurert for main-grenen. Aktiv gren: $branch"
 }
 
-$websiteFiles = Get-ChildItem -LiteralPath $projectDirectory -File | Where-Object {
-    $_.Extension -in '.html', '.css', '.js', '.svg'
+$websitePathspecs = @(':(top,glob)*.html', ':(top,glob)*.css', ':(top,glob)*.js', ':(top,glob)*.svg')
+function Test-WebsitePath([string]$path) {
+    return ($path -eq [System.IO.Path]::GetFileName($path)) -and
+        ([System.IO.Path]::GetExtension($path) -in @('.html', '.css', '.js', '.svg'))
 }
-$websiteNames = @($websiteFiles | ForEach-Object { $_.Name })
 
 $stagedBefore = git -C $projectDirectory diff --cached --name-only
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke kontrollere Git-indeksen.' }
@@ -37,7 +38,7 @@ if ($stagedBefore -and -not $Publish) {
     throw 'Det finnes allerede stagede endringer. Kontroller dem eller fjern staging før du kjører publiseringsskriptet.'
 }
 if ($stagedBefore -and $Publish) {
-    $unexpectedStaged = @($stagedBefore | Where-Object { $_ -notin $websiteNames })
+    $unexpectedStaged = @($stagedBefore | Where-Object { -not (Test-WebsitePath $_) })
     if ($unexpectedStaged) {
         throw "Kan ikke publisere fordi andre filer er staget: $($unexpectedStaged -join ', ')"
     }
@@ -54,10 +55,10 @@ foreach ($htmlFile in $htmlFiles) {
     }
 }
 
-git -C $projectDirectory diff --check -- $websiteNames
+git -C $projectDirectory diff --check -- $websitePathspecs
 if ($LASTEXITCODE -ne 0) { throw 'Nettstedfilene inneholder whitespace-feil.' }
 
-git -C $projectDirectory add -- $websiteNames
+git -C $projectDirectory add -A -- $websitePathspecs
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke klargjøre nettstedfilene.' }
 
 $stagedChanges = git -C $projectDirectory diff --cached --name-only

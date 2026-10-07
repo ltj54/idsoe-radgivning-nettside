@@ -10,7 +10,9 @@ Dette repositoriet inneholder nettsiden og lokale utviklingsverktøy for Idsøe 
 
 ## Forhåndsvis lokalt
 
-Åpne prosjektmappen i IntelliJ IDEA og kjør:
+Åpne prosjektmappen i IntelliJ IDEA, velg `Start Idsoe Radgivning` i Run-menyen øverst og trykk den grønne Run-knappen. Dette starter nettsiden lokalt og åpner nettleseren. `publish-site.ps1` er til publisering og skal ikke brukes for lokal forhåndsvisning.
+
+Alternativt kan du kjøre:
 
 ```powershell
 .\start.ps1

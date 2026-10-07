@@ -77,8 +77,7 @@ def main():
             assert target.is_file(), (name, "missing file", ref)
             if url.fragment and target.suffix == ".html":
                 fragment = unquote(url.fragment)
-                # #om-ella is a backwards-compatible deep link that opens the dialog.
-                assert fragment in pages[target.name].ids or (fragment == "om-ella" and target.name in {"index.html", "en.html"}), (name, "missing anchor", ref)
+                assert fragment in pages[target.name].ids, (name, "missing anchor", ref)
             links += 1
     print(f"OK: {len(pages)} pages, {links} local links/assets, language pairs, headings and HTML structure.")
 
