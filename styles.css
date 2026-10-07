@@ -204,3 +204,6 @@ html{scroll-padding-top:155px;scrollbar-gutter:stable}
 .contact-form label,.contact-form-card .contact-warning{font-size:.875rem}
 .form-note{font-size:.8125rem}
 @media(max-width:740px){.header .main-nav{font-size:.875rem}}
+
+.contact-detail a,.direct-email a{text-underline-offset:3px;overflow-wrap:anywhere}
+.contact-form-card>.direct-email{font-size:.875rem;margin-bottom:12px}
