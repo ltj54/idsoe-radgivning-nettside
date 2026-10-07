@@ -164,7 +164,6 @@ html{scroll-padding-top:155px;scrollbar-gutter:stable}
 .goal-details summary::-webkit-details-marker{display:none}
 .goal-details summary:focus-visible{outline:3px solid #b57727;outline-offset:4px}
 .goal-panel{margin-top:20px;padding:clamp(20px,3vw,32px);border:1px solid var(--line);border-radius:5px;background:var(--sage)}
-.goal-panel h2{font-size:1.65rem;margin-bottom:16px}
 .goal-panel p{font-size:.96rem;line-height:1.7;margin-bottom:16px}
 .goal-panel p:last-child{margin-bottom:0}
 .clinical-page section{border-top:1px solid var(--line);padding-top:24px;margin-bottom:36px}
