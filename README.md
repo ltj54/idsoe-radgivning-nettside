@@ -4,7 +4,7 @@ Dette repositoriet inneholder nettsiden og lokale utviklingsverktøy for Idsøe 
 
 ## Prosjektstruktur
 
-- HTML-, CSS-, JavaScript- og bildefilene i rotmappen er både den redigerbare nettsiden og GitHub Pages-publiseringen.
+- HTML-, CSS-, JavaScript- og bildefilene i rotmappen er kildefilene for både forhåndsvisningen på GitHub Pages og produksjonssiden hos Domeneshop.
 - `scripts/` og `start.ps1` brukes til lokal forhåndsvisning og kontroll.
 - `docs/` inneholder lokale arbeidsdokumenter og er bevisst utelatt fra Git. Gjennomgå filer nøye før denne regelen endres.
 
@@ -28,12 +28,12 @@ Kjør `python scripts/check_site.py` for å kontrollere kildefilene. Kjør deret
 .\publish-site.ps1
 ```
 
-Skriptet oppdaterer versjonsparameteren for CSS og JavaScript, kontrollerer filene og legger bare nettsidefilene i staging. Kontroller endringene før commit. Når du uttrykkelig vil commite og pushe nettsideendringen, kjør:
+Skriptet oppdaterer versjonsparameteren for CSS og JavaScript, kontrollerer filene og legger bare nettsidefilene i staging. Kontroller endringene før commit. Når du uttrykkelig vil commite, pushe og publisere nettsideendringen, kjør:
 
 ```powershell
 .\publish-site.ps1 -Publish
 ```
 
-GitHub Pages serverer nettsiden direkte fra rotmappen. Hver nettsidefil finnes derfor bare ett sted.
+Skriptet pusher kildefilene til GitHub og laster deretter nettstedfilene opp til `public_html/default` hos Domeneshop via SFTP. SFTP-passordet etterspørres under publisering og skal ikke lagres i prosjektet. Produksjonssiden ligger på `https://emidsoe.no/`; GitHub Pages beholdes som forhåndsvisning og versjonshistorikk.
 
 Versjonsparameteren sørger for at nettleseren henter oppdatert CSS og JavaScript etter publisering.

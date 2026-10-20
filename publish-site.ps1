@@ -6,6 +6,11 @@ $ErrorActionPreference = 'Stop'
 $projectDirectory = (Resolve-Path -LiteralPath $PSScriptRoot).Path
 $repositoryUrl = 'https://github.com/ltj54/idsoe-radgivning-nettside.git'
 $pagesUrl = 'https://ltj54.github.io/idsoe-radgivning-nettside/'
+$productionUrl = 'https://emidsoe.no/'
+$sftpHost = 'sftp1.no1.essentialhosting.net'
+$sftpPort = 22
+$sftpUser = 'web-245729'
+$sftpDirectory = 'public_html/default'
 
 if (-not (Test-Path -LiteralPath (Join-Path $projectDirectory 'index.html'))) {
     throw "Finner ikke index.html i $projectDirectory"
@@ -55,6 +60,14 @@ foreach ($htmlFile in $htmlFiles) {
     }
 }
 
+$pythonCommand = Get-Command python -ErrorAction SilentlyContinue
+if (-not $pythonCommand) {
+    throw 'Python 3 må være installert og tilgjengelig som python i PATH.'
+}
+
+& $pythonCommand.Source (Join-Path $projectDirectory 'scripts/check_site.py')
+if ($LASTEXITCODE -ne 0) { throw 'Den automatiske nettstedskontrollen feilet.' }
+
 git -C $projectDirectory diff --check -- $websitePathspecs
 if ($LASTEXITCODE -ne 0) { throw 'Nettstedfilene inneholder whitespace-feil.' }
 
@@ -79,5 +92,38 @@ if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke opprette commit.' }
 git -C $projectDirectory push origin main
 if ($LASTEXITCODE -ne 0) { throw 'Kunne ikke publisere endringene til GitHub.' }
 
-Write-Host 'Nettsiden er publisert til GitHub Pages.' -ForegroundColor Green
-Write-Host "Når GitHub Pages er ferdig oppdatert, kan denne lenken sendes til Ella: $pagesUrl" -ForegroundColor Green
+$scpCommand = Get-Command scp -ErrorAction SilentlyContinue
+if (-not $scpCommand) {
+    throw 'Finner ikke scp. Installer eller aktiver OpenSSH Client i Windows før publisering til Domeneshop.'
+}
+
+$deploymentFiles = Get-ChildItem -LiteralPath $projectDirectory -File | Where-Object {
+    $_.Extension -in @('.html', '.css', '.js', '.svg')
+} | Sort-Object @{ Expression = { $_.Name -eq 'index.html' } }, Name
+
+if (-not $deploymentFiles) {
+    throw 'Fant ingen nettstedfiler å laste opp.'
+}
+
+$sftpTarget = '{0}@{1}:{2}/' -f $sftpUser, $sftpHost, $sftpDirectory
+$scpArguments = @('-P', "$sftpPort") + @($deploymentFiles.FullName) + @($sftpTarget)
+
+Write-Host "Laster opp $($deploymentFiles.Count) filer til Domeneshop." -ForegroundColor Yellow
+Write-Host 'Skriv inn SFTP-passordet når du blir bedt om det. Passordet lagres ikke av skriptet.' -ForegroundColor Yellow
+& $scpCommand.Source @scpArguments
+if ($LASTEXITCODE -ne 0) {
+    throw 'GitHub ble oppdatert, men opplastingen til Domeneshop mislyktes.'
+}
+
+try {
+    $response = Invoke-WebRequest -Uri $productionUrl -TimeoutSec 20
+    if ($response.StatusCode -ne 200 -or $response.Content -notmatch '<title>Idsøe Rådgivning') {
+        throw 'Produksjonssiden svarte, men innholdet kunne ikke bekreftes.'
+    }
+} catch {
+    throw "Filene ble lastet opp, men kontrollen av $productionUrl mislyktes: $($_.Exception.Message)"
+}
+
+Write-Host 'Kildekoden er pushet til GitHub.' -ForegroundColor Green
+Write-Host "Forhåndsvisning: $pagesUrl" -ForegroundColor Green
+Write-Host "Nettsiden er publisert og kontrollert: $productionUrl" -ForegroundColor Green
