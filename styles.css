@@ -209,6 +209,20 @@ html{scroll-padding-top:155px;scrollbar-gutter:stable}
 
 .contact-detail a,.direct-email a{text-underline-offset:3px;overflow-wrap:anywhere}
 .contact-form-card>.direct-email{font-size:.875rem;margin-bottom:12px}
+.contact-email-dialog{max-width:min(500px,calc(100% - 32px))}
+.contact-email-dialog .contact-address{font-size:1.1rem;color:var(--ink);font-weight:600;overflow-wrap:anywhere}
+.contact-email-dialog .contact-address a{text-underline-offset:4px}
+.contact-email-actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 14px}
+.contact-email-actions .button{justify-content:center;cursor:pointer;border:1px solid var(--green)}
+.contact-email-actions .button-secondary{background:transparent;color:var(--green);border-color:#96a38e}
+.contact-email-actions .button-secondary:hover{background:var(--sage)}
+.contact-email-dialog .form-note{margin:0}
+.contact-webmail{margin:0 0 14px;font-size:.875rem}
+.contact-webmail summary{width:max-content;max-width:100%;cursor:pointer;color:var(--green);text-decoration:underline;text-underline-offset:4px}
+.contact-webmail summary:focus-visible{outline:3px solid #b57727;outline-offset:3px}
+.contact-webmail p{margin:10px 0 0;color:var(--muted)}
+.contact-webmail p:first-of-type{display:flex;flex-wrap:wrap;gap:8px 18px}
+.contact-webmail a{color:var(--green);text-underline-offset:3px}
 
 /* Forside: tilbudene skal komme tidligere og være tydelige uten ekstra pynt. */
 .home-page .hero{gap:42px;padding-block:30px 36px}
