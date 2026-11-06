@@ -31,10 +31,11 @@ if ($branch -ne 'main') {
     throw "Publisering er bare konfigurert for main-grenen. Aktiv gren: $branch"
 }
 
-$websitePathspecs = @(':(top,glob)*.html', ':(top,glob)*.css', ':(top,glob)*.js', ':(top,glob)*.svg')
+$websitePathspecs = @(':(top,glob)*.html', ':(top,glob)*.css', ':(top,glob)*.js', ':(top,glob)*.svg', ':(top)robots.txt', ':(top)sitemap.xml', ':(top)publish-site.ps1')
 function Test-WebsitePath([string]$path) {
     return ($path -eq [System.IO.Path]::GetFileName($path)) -and
-        ([System.IO.Path]::GetExtension($path) -in @('.html', '.css', '.js', '.svg'))
+        (($path -in @('robots.txt', 'sitemap.xml', 'publish-site.ps1')) -or
+        ([System.IO.Path]::GetExtension($path) -in @('.html', '.css', '.js', '.svg')))
 }
 
 $stagedBefore = git -C $projectDirectory diff --cached --name-only
@@ -98,7 +99,7 @@ if (-not $scpCommand) {
 }
 
 $deploymentFiles = Get-ChildItem -LiteralPath $projectDirectory -File | Where-Object {
-    $_.Extension -in @('.html', '.css', '.js', '.svg')
+    $_.Extension -in @('.html', '.css', '.js', '.svg') -or $_.Name -in @('robots.txt', 'sitemap.xml')
 } | Sort-Object @{ Expression = { $_.Name -eq 'index.html' } }, Name
 
 if (-not $deploymentFiles) {
@@ -119,6 +120,10 @@ try {
     $response = Invoke-WebRequest -Uri $productionUrl -TimeoutSec 20
     if ($response.StatusCode -ne 200 -or $response.Content -notmatch '<title>Idsøe Rådgivning') {
         throw 'Produksjonssiden svarte, men innholdet kunne ikke bekreftes.'
+    }
+    $sitemapResponse = Invoke-WebRequest -Uri ($productionUrl + 'sitemap.xml') -TimeoutSec 20
+    if ($sitemapResponse.StatusCode -ne 200 -or $sitemapResponse.Content -notmatch '<urlset') {
+        throw 'Nettstedskartet kunne ikke bekreftes.'
     }
 } catch {
     throw "Filene ble lastet opp, men kontrollen av $productionUrl mislyktes: $($_.Exception.Message)"
